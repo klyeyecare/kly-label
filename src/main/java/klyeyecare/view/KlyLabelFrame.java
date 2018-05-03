@@ -5,11 +5,15 @@
  */
 package klyeyecare.view;
 
+import java.util.Iterator;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
+import javax.swing.table.TableColumnModel;
 import klyeyecare.controller.FrameController;
+import klyeyecare.model.Frame;
 
 /**
  *
@@ -18,6 +22,7 @@ import klyeyecare.controller.FrameController;
 public class KlyLabelFrame extends javax.swing.JFrame {
 
     private final FrameController ctrl;
+    private Object[][] tableData;
 
     /**
      * Creates new form KlyLabelFrame
@@ -25,19 +30,29 @@ public class KlyLabelFrame extends javax.swing.JFrame {
     public KlyLabelFrame() {
         this.ctrl = new FrameController();
         initComponents();
+        TableColumnModel tcm = jTable1.getColumnModel();
+        tcm.removeColumn(jTable1.getColumn("FrameId"));
     }
-
-    private Object[][] setInitialTableData() {
-        return new Object[][]{
-            {null, null, null, null}, 
-            {null, null, null, null}, 
-            {null, null, null, null}, 
-            {null, null, null, null}};
+    
+    private Object[][] setTableData(List<Frame> frames) {
+        this.tableData = new Object[frames.size()][this.setColumnNames().length];
+        int i = 0;
+        
+        for (Frame f : frames) {
+            tableData[i][0] = f.getFrameid();
+            tableData[i][1] = f.getManufacturername();
+            tableData[i][2] = f.getCollectionname();
+            tableData[i][3] = f.getFramename();
+            tableData[i][4] = f.getUpccode();
+            tableData[i][5] = f.getRetailprice();
+            i++;
+        }
+        return tableData;
     }
 
     private String[] setColumnNames() {
         return new String[]{
-            "Manufacturer", "Collection", "Frame", "UPC", "Price"
+            "FrameId", "Manufacturer", "Collection", "Frame", "UPC", "Price"
         };
     }
 
@@ -150,12 +165,12 @@ public class KlyLabelFrame extends javax.swing.JFrame {
         );
 
         jTable1.setModel(new javax.swing.table.DefaultTableModel(
-            setInitialTableData(),
+            setTableData(ctrl.findFrame()),
             setColumnNames()
         ));
         jTable1.setDragEnabled(true);
         jTable1.setGridColor(new java.awt.Color(204, 204, 204));
-        jTable1.setShowGrid(true);
+        jTable1.setShowGrid(false);
         jScrollPane1.setViewportView(jTable1);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());

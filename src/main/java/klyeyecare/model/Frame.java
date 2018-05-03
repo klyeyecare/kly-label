@@ -7,6 +7,7 @@ package klyeyecare.model;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.text.DecimalFormat;
 import java.util.Date;
 import javax.persistence.Basic;
 import javax.persistence.Column;
@@ -28,7 +29,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 @XmlRootElement
 @NamedQueries({
     //Frame
-    @NamedQuery(name = "findFrame", query = "SELECT f.frameid, f.framename, f.manufacturername, f.collectionname, f.upccode, f.retailprice FROM Frame f")
+    @NamedQuery(name = "findFrame", query = "SELECT f FROM Frame f ORDER BY f.manufacturername, f.collectionname")
     , @NamedQuery(name = "findFrameById", query = "SELECT f FROM Frame f WHERE f.frameid = :frameid")
     , @NamedQuery(name = "findFrameByCreatedDt", query = "SELECT f FROM Frame f WHERE f.createdDt = :createdDt")
     , @NamedQuery(name = "findFrameByFramename", query = "SELECT f FROM Frame f WHERE f.framename = :framename")
@@ -379,8 +380,9 @@ public class Frame implements Serializable {
         this.cost = cost;
     }
 
-    public BigDecimal getRetailprice() {
-        return retailprice;
+    public String getRetailprice() {
+        DecimalFormat df = new DecimalFormat("#,##0.00");
+        return df.format(retailprice);
     }
 
     public void setRetailprice(BigDecimal retailprice) {
