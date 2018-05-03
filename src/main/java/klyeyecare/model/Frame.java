@@ -28,7 +28,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 @XmlRootElement
 @NamedQueries({
     //Frame
-    @NamedQuery(name = "findFrame", query = "SELECT f FROM Frame f")
+    @NamedQuery(name = "findFrame", query = "SELECT f.frameid, f.framename, f.manufacturername, f.collectionname, f.upccode, f.retailprice FROM Frame f")
     , @NamedQuery(name = "findFrameById", query = "SELECT f FROM Frame f WHERE f.frameid = :frameid")
     , @NamedQuery(name = "findFrameByCreatedDt", query = "SELECT f FROM Frame f WHERE f.createdDt = :createdDt")
     , @NamedQuery(name = "findFrameByFramename", query = "SELECT f FROM Frame f WHERE f.framename = :framename")
