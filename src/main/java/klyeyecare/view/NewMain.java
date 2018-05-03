@@ -20,28 +20,25 @@ public class NewMain {
     /**
      * @param args the command line arguments
      */
-    public static void main(String[] args) {
-        
-
-        FrameController ctrl = new FrameController();
-         
-       ctrl.findManufacture().stream().map((s) -> {
-           System.out.println(s);
-            return s;
-        }).forEachOrdered((s) -> {
-            ctrl.findCollectionByManufacturerName(s).forEach((s2) -> {
-                
-                ctrl.findManufactureByCollectionName(s2).forEach((s3) -> {
-                    System.out.println("\t"+s2+" - "+s3);
-                });
-                          
-                ctrl.findFrameByCollectionName(s2).forEach((f) -> {
-                    System.out.println("\t\t"+f.getFramename()+":UPC "+f.getUpccode());
-                });
-            });
-        });
-       
-      
-    }
-    
+//    public static void main(String[] args) {
+//
+//        FrameController ctrl = new FrameController();
+//
+//        ctrl.findManufacture().forEach((s) -> {
+//            
+//           System.out.println(s); 
+//           
+//            ctrl.findCollectionByManufacturerName(s).forEach((s2) -> {
+//
+//                ctrl.findManufactureByCollectionName(s2).forEach((s3) -> {
+//                    System.out.println("\t" + s2 + " - " + s3);
+//                });
+//
+//                ctrl.findFrameByCollectionName(s2).forEach((f) -> {
+//                    System.out.println("\t\t" + f.getFramename() + ":UPC " + f.getUpccode());
+//                });
+//            });
+//        });
+//
+//    }
 }
