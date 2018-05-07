@@ -20,28 +20,13 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.xml.bind.annotation.XmlRootElement;
 
-/**
- *
- * @author Yourainne
- */
 @Entity
 @Table(name = "frameinventory")
 @XmlRootElement
 @NamedQueries({
     //Frame
-    @NamedQuery(name = "findFrame", query = "SELECT f FROM Frame f ORDER BY f.manufacturername, f.collectionname")
-    , @NamedQuery(name = "findFrameById", query = "SELECT f FROM Frame f WHERE f.frameid = :frameid")
-    , @NamedQuery(name = "findFrameByCreatedDt", query = "SELECT f FROM Frame f WHERE f.createdDt = :createdDt")
-    , @NamedQuery(name = "findFrameByFramename", query = "SELECT f FROM Frame f WHERE f.framename = :framename")
-    , @NamedQuery(name = "findFrameByLastUpdateddt", query = "SELECT f FROM Frame f WHERE f.lastupdateddt = :lastupdateddt")
-    , @NamedQuery(name = "findFrameByUpccode", query = "SELECT f FROM Frame f WHERE f.upccode = :upccode")
-    , @NamedQuery(name = "findFrameByManufacturerName", query = "SELECT f FROM Frame f WHERE f.manufacturername = :manufacturername")
-    , @NamedQuery(name = "findFrameByCollectionName", query = "SELECT f FROM Frame f WHERE f.collectionname = :collectionname")
-    //Manufacturer
-    , @NamedQuery(name = "findManufacter", query = "SELECT DISTINCT f.manufacturername FROM Frame f")
-    , @NamedQuery(name = "findManufacturerByCollectionName", query = "SELECT DISTINCT f.manufacturername FROM Frame f WHERE f.collectionname = :collectionname")
-    //Collection
-    , @NamedQuery(name = "findCollectionByManufacturerName", query = "SELECT DISTINCT f.collectionname FROM Frame f WHERE f.manufacturername = :manufacturername")
+    @NamedQuery(name = "findFrame", query = "SELECT f FROM Frame f ORDER BY f.manufacturername, f.collectionname, f.framename")
+    , @NamedQuery(name = "findFrameById", query = "SELECT f FROM Frame f WHERE f.frameid = :frameid ORDER BY f.manufacturername, f.collectionname, f.framename")
 })
 public class Frame implements Serializable {
 
@@ -66,7 +51,6 @@ public class Frame implements Serializable {
     private String colornumber;
     @Column(name = "materialid")
     private Integer materialid;
-    // @Max(value=?)  @Min(value=?)//if you know range of your decimal fields consider using these annotations to enforce field validation
     @Column(name = "a")
     private BigDecimal a;
     @Column(name = "dbl")
