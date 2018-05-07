@@ -20,6 +20,7 @@ public class MainPanel extends javax.swing.JFrame {
 
     private final FrameController ctrl;
     private List<Frame> frames;
+    private List<Frame> tableData;
     private String[] columnNames;
     private List<Frame> manufactures;
     private List<Frame> collections;
@@ -31,41 +32,41 @@ public class MainPanel extends javax.swing.JFrame {
         initComponents();
         ctrl = new FrameController();
         frames = ctrl.findFrame();
-        
+
         //SET TABLE 
         columnNames = new String[]{"Id", "Manufacturer", "Collection", "Frame", "UPC", "Retail"};
         Object[][] data = new Object[frames.size()][columnNames.length];
         for (int i = 0; i < frames.size(); i++) {
-            data[i][0]= frames.get(i).getFrameid();
-            data[i][1]= frames.get(i).getManufacturername();
-            data[i][2]= frames.get(i).getCollectionname();
-            data[i][3]= frames.get(i).getFramename();
-            data[i][4]= frames.get(i).getUpccode();
-            data[i][5]= frames.get(i).getRetailprice();
+            data[i][0] = frames.get(i).getFrameid();
+            data[i][1] = frames.get(i).getManufacturername();
+            data[i][2] = frames.get(i).getCollectionname();
+            data[i][3] = frames.get(i).getFramename();
+            data[i][4] = frames.get(i).getUpccode();
+            data[i][5] = frames.get(i).getRetailprice();
         }
         DefaultTableModel model = new DefaultTableModel(data, columnNames);
         frameTable.setModel(model);
-        
+
         //SET MANUFACTURE
         manufactures = io.vavr.collection.List.ofAll(frames)
-                       .distinctBy(Frame::getManufacturername)
-                       .toJavaList();
-        
+                .distinctBy(Frame::getManufacturername)
+                .toJavaList();
+
         //SET COLLECTION
         collections = io.vavr.collection.List.ofAll(frames)
-                       .distinctBy(Frame::getCollectionname)
-                       .toJavaList();
-        
+                .distinctBy(Frame::getCollectionname)
+                .toJavaList();
+
         //SET DROPDOWN
         comboManufacture.removeAllItems();
         comboManufacture.addItem("");
-        manufactures.forEach(frame ->{
+        manufactures.forEach(frame -> {
             comboManufacture.addItem(frame.getManufacturername());
         });
-        
+
         comboCollection.removeAllItems();
         comboCollection.addItem("");
-        collections.forEach(frame ->{
+        collections.forEach(frame -> {
             comboCollection.addItem(frame.getCollectionname());
         });
     }
@@ -94,6 +95,11 @@ public class MainPanel extends javax.swing.JFrame {
         });
 
         comboCollection.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        comboCollection.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                comboCollectionActionPerformed(evt);
+            }
+        });
 
         frameTable.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -131,41 +137,41 @@ public class MainPanel extends javax.swing.JFrame {
                     .addComponent(comboManufacture, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(comboCollection, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 275, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 275, Short.MAX_VALUE)
+                .addContainerGap())
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
     private void comboManufactureActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_comboManufactureActionPerformed
-        String manufactureSelected = (String)comboManufacture.getSelectedItem();
-        if(manufactureSelected != null){
-            if(manufactureSelected.length() > 0){
-                System.out.println(manufactureSelected+" selected");
-                
+        String manufactureSelected = (String) comboManufacture.getSelectedItem();
+        if (manufactureSelected != null) {
+            if (manufactureSelected.length() > 0) {
+                System.out.println(manufactureSelected + " selected");
+
                 //SET COMBO
                 comboCollection.removeAllItems();
                 comboCollection.addItem("");
-                collections.forEach(frame ->{
-                    if(frame.getManufacturername().equals(manufactureSelected)){
+                collections.forEach(frame -> {
+                    if (frame.getManufacturername().equals(manufactureSelected)) {
                         comboCollection.addItem(frame.getCollectionname());
                     }
                 });
-              
+
                 //SET TABLE
-                DefaultTableModel model = (DefaultTableModel)frameTable.getModel();
+                DefaultTableModel model = (DefaultTableModel) frameTable.getModel();
                 model.setRowCount(0);
-                
+
                 List<Frame> framesFromManufacture = new ArrayList<>();
-                for(int i = 0; i < frames.size(); i++){
-                    if(frames.get(i).getManufacturername().equals(manufactureSelected)){
+                for (int i = 0; i < frames.size(); i++) {
+                    if (frames.get(i).getManufacturername().equals(manufactureSelected)) {
                         framesFromManufacture.add(frames.get(i));
                     }
                 }
-                
+
                 Object[][] data = new Object[framesFromManufacture.size()][columnNames.length];
-                for(int j = 0; j < framesFromManufacture.size(); j++){
+                for (int j = 0; j < framesFromManufacture.size(); j++) {
                     data[j][0] = framesFromManufacture.get(j).getFrameid();
                     data[j][1] = framesFromManufacture.get(j).getManufacturername();
                     data[j][2] = framesFromManufacture.get(j).getCollectionname();
@@ -174,12 +180,90 @@ public class MainPanel extends javax.swing.JFrame {
                     data[j][5] = framesFromManufacture.get(j).getRetailprice();
                     model.addRow(data[j]);
                 }
-                
-            }else{
+
+            } else {
                 System.out.println("no selection made");
+
+                //SET COMBO
+                comboCollection.removeAllItems();
+                comboCollection.addItem("");
+                collections.forEach(frame -> {
+                    comboCollection.addItem(frame.getCollectionname());
+                });
             }
         }
     }//GEN-LAST:event_comboManufactureActionPerformed
+
+    private void comboCollectionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_comboCollectionActionPerformed
+        String selectedCollection = (String) comboCollection.getSelectedItem();
+        if (selectedCollection != null) {
+            if (selectedCollection.length() > 0) {
+                System.out.println(selectedCollection + " selected");
+
+                //SET TABLE
+                DefaultTableModel model = (DefaultTableModel) frameTable.getModel();
+                model.setRowCount(0);
+
+                List<Frame> frameFromCollection = new ArrayList<>();
+                frames.forEach(frame -> {
+                    if (frame.getCollectionname().equals(selectedCollection)) {
+                        frameFromCollection.add(frame);
+                    }
+                });
+
+                Object[][] data = new Object[frameFromCollection.size()][columnNames.length];
+                for (int j = 0; j < frameFromCollection.size(); j++) {
+                    data[j][0] = frameFromCollection.get(j).getFrameid();
+                    data[j][1] = frameFromCollection.get(j).getManufacturername();
+                    data[j][2] = frameFromCollection.get(j).getCollectionname();
+                    data[j][3] = frameFromCollection.get(j).getFramename();
+                    data[j][4] = frameFromCollection.get(j).getUpccode();
+                    data[j][5] = frameFromCollection.get(j).getRetailprice();
+                    model.addRow(data[j]);
+                }
+
+            } else {
+                System.out.println("no selection");
+
+                //CHECK MENUFACTURE SELECTION
+                String selectedManufacture = (String) comboManufacture.getSelectedItem();
+                if (selectedManufacture != null) {
+
+                    List<Frame> frameFromNoSelection = new ArrayList<>();
+
+                    if (selectedManufacture.length() > 0) {
+
+                        for (int i = 0; i < frames.size(); i++) {
+                            if (frames.get(i).getManufacturername().equals(selectedManufacture)) {
+                                frameFromNoSelection.add(frames.get(i));
+                            }
+                        }
+
+                    } else {
+
+                        frameFromNoSelection = frames;
+
+                    }
+
+                    //SET TABLE
+                    DefaultTableModel model = (DefaultTableModel) frameTable.getModel();
+                    model.setRowCount(0);
+
+                    Object[][] data = new Object[frameFromNoSelection.size()][columnNames.length];
+                    for (int j = 0; j < frameFromNoSelection.size(); j++) {
+                        data[j][0] = frameFromNoSelection.get(j).getFrameid();
+                        data[j][1] = frameFromNoSelection.get(j).getManufacturername();
+                        data[j][2] = frameFromNoSelection.get(j).getCollectionname();
+                        data[j][3] = frameFromNoSelection.get(j).getFramename();
+                        data[j][4] = frameFromNoSelection.get(j).getUpccode();
+                        data[j][5] = frameFromNoSelection.get(j).getRetailprice();
+                        model.addRow(data[j]);
+                    }
+
+                }
+            }
+        }
+    }//GEN-LAST:event_comboCollectionActionPerformed
 
     /**
      * @param args the command line arguments
